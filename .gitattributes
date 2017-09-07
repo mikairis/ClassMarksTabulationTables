@@ -1,0 +1,137 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+import java.util.*;
+
+public class Question_2modNew 
+{
+    public static void main(String[] args) 
+    {
+        Scanner kb = new Scanner(System.in); 
+        
+        System.out.println("How many students do you have?");        // user prompt to get the number of students to be entered
+        int studentNum = kb.nextInt();
+       
+        String[] student = new String[studentNum];
+        
+        System.out.println("How many tests did you administer?");   // user prompt to get the number of tests administered
+        int testNum = kb.nextInt();
+        
+        int[][] grades = new int[studentNum][testNum];  // create an array to contain all grades entered
+        
+        int rowCounterGrade = 0;
+               
+        for(int i = 0; i < studentNum; i++)     // loop to prompt user to enter the student name and their grades until all students is entered
+        {
+            inputName(i, student);          // call method to input student name
+            inputGrade(testNum, i, grades); // call method to input student's test grade
+        }
+        
+        double[] studentAvgGrade = avgGrade(studentNum, grades);    // create an array to store average scores per student
+        
+        char[] gradeLetter = new char[studentNum];
+        int idx = 0;
+                
+        for(int i = 0; i < studentNum; i++) // loop to check the grades in array and compare it with the corresponding letter grade
+        {
+            if(studentAvgGrade[i] >= 85 && studentAvgGrade[i] <= 100)
+            {
+                gradeLetter[idx] = 'A';
+                idx++;
+            }
+            else if(studentAvgGrade[i] >= 75 && studentAvgGrade[i] <= 84)
+            {
+                gradeLetter[idx] = 'B';
+                idx++;
+            }
+            else if(studentAvgGrade[i] >= 65 && studentAvgGrade[i] <= 74)
+            {
+                gradeLetter[idx] = 'C';
+                idx++;
+            }
+            else if(studentAvgGrade[i] >= 50 && studentAvgGrade[i] <= 64)
+            {
+                gradeLetter[idx] = 'D';
+                idx++;
+            }
+            else if(studentAvgGrade[i] < 50)
+            {
+                gradeLetter[idx] = 'F';
+                idx++;
+            }
+        }
+
+        System.out.println("The students, grades, average grade, and letter grade breakdown are: ");
+        int j = 0;
+        for (int[] grade : grades) {          // loop to print out student name, grades, average grade per student and letter grade
+            System.out.print(student[j] + "\t" + "\t");
+            for (int c = 0; c < grade.length; c++) {
+                System.out.print(grade[c] + "\t");
+            }
+            System.out.print(studentAvgGrade[j] + "\t" + gradeLetter[j]);
+            j++;
+            System.out.println();
+        }
+        
+        int sumOfAllGrades = 0;
+        int countOfAllGrades = 0;
+        int averageOfAllGrades;
+        
+        for (int[] grade : grades) // loop to compute overall class average
+        {
+            for (int c = 0; c < grade.length; c++) {
+                sumOfAllGrades = sumOfAllGrades + grade[c];
+                countOfAllGrades++;
+            }
+        }
+        averageOfAllGrades = sumOfAllGrades / countOfAllGrades;
+        System.out.print("The class average for all grades is: " + averageOfAllGrades); // print out overall class average
+        System.out.println();
+    }
+    
+    public static String[] inputName(int nameCounter, String[] data) // method to prompt user to enter student name
+    {
+        Scanner kb = new Scanner(System.in);      
+
+        System.out.println("Enter student name: ");
+        data[nameCounter] = kb.nextLine();
+
+        return data;
+    } 
+    
+    public static int[][] inputGrade(int testNum, int i, int[][] gradeArray) // method to enter student grade
+    {
+        Scanner kb = new Scanner(System.in);
+        
+        for(int c = 0; c < testNum; c++)
+        {
+            System.out.println("Enter student grade: ");
+            gradeArray[i][c] = kb.nextInt();
+        }
+        return gradeArray;
+    }
+    
+    public static double[] avgGrade(int studentNum, int[][] grades) // method to compute average score
+    {              
+        int sum;
+        int count;
+        int index = 0;
+        double avgG;
+        double totalClassAverage = 0;
+        
+        double[] studentAvgGrade = new double[studentNum];
+        
+        for (int[] grade : grades) {            
+            sum = 0;
+            count = 0;
+            for (int r = 0; r < grade.length; r++) {
+                sum = grade[r] + sum;
+                count++;
+            }
+            avgG = sum / count;
+            studentAvgGrade[index] = avgG;
+            index++;
+        }
+        return studentAvgGrade;
+    }
+}
